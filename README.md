@@ -28,7 +28,7 @@ The goal: **Create a semi-automated pipeline that fetches, processes, and visual
 ### Enhanced Workflow Diagram
 
 ```mermaid
-graph TD
+Flowchart TD
     A[Python Script: datafetch.py fetches Bitcoin price via CoinGecko API every 10 seconds] --> B[Calculate moving averages (ma_6) and volatility (volatility_12) using Analysis.py]
     B --> C[Write outputs to CSV files: bitcoin_realtime.csv and bitcoin_analytics.csv]
     C --> D[Git automation via gitpush.py pushes updated CSVs to GitHub repository]
