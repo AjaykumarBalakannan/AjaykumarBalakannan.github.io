@@ -29,20 +29,20 @@ The goal: **Create a semi-automated pipeline that fetches, processes, and visual
 
 ```mermaid
 graph TD
-    A[Python Script: datafetch.py fetches Bitcoin price via CoinGecko API every 10 seconds] --> B[Calculate moving averages (ma_6) and volatility (volatility_12)]
-    B --> C[Write outputs to CSV files (bitcoin_realtime.csv, bitcoin_analytics.csv)]
-    C --> D[Git automation via gitpush.py pushes updated CSVs to GitHub repo]
-    D --> E[Qlik Cloud REST Connector fetches CSV file from raw GitHub URL on reload]
-    E --> F[Data Load Editor parses fields and inserts timestamp]
-    F --> G[Qlik Dashboard renders visuals: Line charts, KPIs, rolling max]
-    G --> H[User analyzes trends and interacts with real-time visual filters]
+    A[Python Script: datafetch.py fetches Bitcoin price via CoinGecko API every 10 seconds] --> B[Calculate moving averages (ma_6) and volatility (volatility_12) using Analysis.py]
+    B --> C[Write outputs to CSV files: bitcoin_realtime.csv and bitcoin_analytics.csv]
+    C --> D[Git automation via gitpush.py pushes updated CSVs to GitHub repository]
+    D --> E[Qlik Cloud REST Connector fetches latest CSV from GitHub raw URL on demand]
+    E --> F[Data Load Editor parses fields and uses now() to append current timestamp]
+    F --> G[Qlik Dashboard visualizes data: Line charts, KPIs, filters, moving average, volatility tracking]
+    G --> H[User explores real-time trends, summary KPIs, and live filtering within Qlik dashboard]
 ```
 
 ### Summary Steps
 
 1. **datafetch.py** pulls data from CoinGecko.
 2. **bitcoin\_realtime.csv** is updated with price and current timestamp.
-3. **Analytics.py** calculates moving average and volatility, storing in `bitcoin_analytics.csv`.
+3. **Analysis.py** calculates moving average and volatility, storing in `bitcoin_analytics.csv`.
 4. **gitpush.py** syncs updated CSVs to GitHub.
 5. **Qlik REST connector** points to GitHub raw URL.
 6. Data is loaded into **Qlik Dashboard** with computed metrics and user interactivity.
@@ -98,7 +98,6 @@ graph TD
 
 ### **Live Analytics Dashboard Example**
 
-![Qlik Dashboard](Images/qlik_dashboard.png)
 *Live feed of Bitcoin price with analytical overlays: moving average and max tracker. KPIs below reflect volatility and extremes.*
 
 ---
@@ -128,8 +127,6 @@ graph TD
   * Python handles fetching + pushing
   * Qlik just reads from a static GitHub URL
 
-![Google Drive Connector Error](Images/qlik_gdrive_error.png)
-
 ---
 
 ## Future Improvements
@@ -148,18 +145,22 @@ graph TD
 │   ├── qlik_dashboard.png
 │   ├── qlik_automation_error.png
 │   └── qlik_gdrive_error.png
-├── datafetch.py                      # CoinGecko data fetcher
+├── Analysis.py                       # Analytics and rolling calculations
+├── bitcoin_analytics.csv             # Includes ma_6 and volatility_12
+├── bitcoin_forecast.csv              # Placeholder for predictive analysis
+├── bitcoin_realtime.csv              # Raw Bitcoin price log
+├── datafetch.py                      # Real-time data collection from API
+├── docker_bash.sh                    # Shell script for Docker bash entry
+├── docker_build.sh                   # Shell script to build Docker image
+├── Dockerfile                        # Build Docker container
 ├── gitpush.py                        # GitHub automation logic
-├── Analysis.py                       # Analytical features & forecasting
-├── bitcoin_realtime.csv              # Appended every 10s
-├── bitcoin_analytics.csv             # With ma_6 and volatility_12
-├── bitcoin_forecast.csv              # Placeholder for future predictions
-├── Dockerfile                        # For container-based scheduling
-├── docker_build.sh / docker_bash.sh # Docker script utilities
-├── requirements.txt                  # Python requirements
-├── QlikAnalysis_utils.py             # Shared methods
-├── README.md                         # Project documentation
-└── real.md                           # Backup copy of presentation notes
+├── QlikAnalysis_utils.py             # Shared utility functions
+├── QlikAnalysis.API.json             # Qlik export
+├── QlikAnalysis.export.json          # Exported configuration
+├── QlikAnalysis.excel.xlsx           # Optional export format
+├── Readme.md                         # Primary documentation
+├── real.md                           # Backup notes
+├── requirements.txt                  # Python dependencies
 ```
 
 ---
